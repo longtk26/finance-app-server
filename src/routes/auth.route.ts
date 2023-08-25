@@ -22,7 +22,7 @@ authRoute.get(
 // Oauth google
 authRoute.get(
     "/google",
-    passport.authenticate("google", { scope: ["profile"] })
+    passport.authenticate("google", { scope: ["profile", "email"] })
 );
 authRoute.get(
     "/google/callback",
@@ -36,7 +36,7 @@ authRoute.get(
 
 authRoute.get("/login/success", loginSuccess);
 
-authRoute.get("/login/failure", async (req, res) => {
+authRoute.get("/login/failure", (req, res) => {
     res.json({
         success: false,
         message: "Failed to login by Oauth",
