@@ -1,6 +1,7 @@
 import { RowDataPacket } from "mysql2";
-import db from "../config/db";
-import { InfoUpdate } from "../types";
+import db from "../config/db.js";
+import { InfoUpdate } from "../types/index.js";
+import { nanoid } from "nanoid/async";
 
 export const findUserByEmail = async (email: string) => {
     try {
@@ -18,10 +19,14 @@ export const findUserByEmail = async (email: string) => {
 
 export const createUser = async (email: string, password: string) => {
     try {
-        await db.execute("INSERT INTO users (email, password) VALUES (?, ?)", [
-            email,
-            password,
-        ]);
+        const userId = await nanoid(10);
+
+        await db.execute(
+            "INSERT INTO users (id, email, password) VALUES (?, ?, ?)",
+            [userId, email, password]
+        );
+
+        return userId;
     } catch (error) {
         console.log(error);
         throw new Error("Error when create user!");

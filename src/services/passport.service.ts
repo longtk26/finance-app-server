@@ -1,9 +1,10 @@
 import passport from "passport";
+import { nanoid } from "nanoid";
 
-import db from "../config/db";
-import { findUserByEmail } from "./users.service";
+import db from "../config/db.js";
+import { findUserByEmail } from "./users.service.js";
 
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 export const configPassPort = () => {
     // passport.use(
@@ -30,9 +31,16 @@ export const configPassPort = () => {
                 findUserByEmail(profile._json.email)
                     .then((user) => {
                         if (!user) {
+                            const userId = nanoid(10);
+
                             db.execute(
-                                "INSERT INTO users (email, federated) VALUES (?, ?)",
-                                [profile._json.email, profile.provider]
+                                "INSERT INTO users (id, email, federated, idProvider) VALUES (?, ?, ?, ?)",
+                                [
+                                    userId,
+                                    profile._json.email,
+                                    profile.provider,
+                                    profile.id,
+                                ]
                             )
                                 .then(() => {
                                     console.log(
@@ -42,8 +50,8 @@ export const configPassPort = () => {
                                 .catch((err) => console.log(err));
                         } else if (!user.federated) {
                             db.execute(
-                                "UPDATE users SET federated = ? WHERE id = ?",
-                                [profile.provider, user.id]
+                                "UPDATE users SET federated = ?, idProvider = ? WHERE id = ?",
+                                [profile.provider, profile.id, user.id]
                             )
                                 .then(() => {
                                     console.log(

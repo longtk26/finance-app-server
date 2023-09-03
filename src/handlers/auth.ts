@@ -3,26 +3,30 @@ import {
     findUserByEmail,
     createUser,
     updateUser,
-} from "../services/users.service";
-import { comparePassword, generateToken, hashPassword } from "../utils";
+} from "../services/users.service.js";
+import {
+    comparePassword,
+    generateToken,
+    hashPassword,
+} from "../utils/index.js";
 
 export const login = async (req: Request, res: Response) => {
     try {
         const user = await findUserByEmail(req.body.email);
-        const userInfo = { email: req.body.email };
 
         if (user) {
             const isPassword = await comparePassword(
                 req.body.password,
                 user.password
             );
+            const userInfo = { id: user.id, email: user.email };
 
             if (isPassword) {
                 const token = generateToken(userInfo);
                 res.json({
                     message: "Login successful!",
                     token,
-                    user: { email: user.email },
+                    user: userInfo,
                 });
             } else {
                 res.status(401);
@@ -40,7 +44,6 @@ export const login = async (req: Request, res: Response) => {
 export const register = async (req: Request, res: Response) => {
     try {
         const user = await findUserByEmail(req.body.email);
-        const userInfo = { email: req.body.email };
 
         if (user && user.password) {
             res.status(409);
@@ -50,6 +53,7 @@ export const register = async (req: Request, res: Response) => {
             const infoUpdate = {
                 password: hashPass,
             };
+            const userInfo = { id: user.id, email: user.email };
 
             await updateUser(req.body.email, infoUpdate);
             const token = generateToken(userInfo);
@@ -57,17 +61,18 @@ export const register = async (req: Request, res: Response) => {
             res.json({
                 message: "Register successful!",
                 token,
-                user: { email: user.email },
+                user: userInfo,
             });
         } else {
             const hashPass = await hashPassword(req.body.password);
-            await createUser(req.body.email, hashPass);
+            const userId = await createUser(req.body.email, hashPass);
+            const userInfo = { id: userId, email: req.body.email };
 
             const token = generateToken(userInfo);
             res.json({
                 message: "Register successful!",
                 token,
-                user: { email: req.body.email },
+                user: userInfo,
             });
         }
     } catch (error) {
@@ -76,16 +81,9 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const loginSuccess = (req: Request, res: Response) => {
-    if (req.isAuthenticated()) {
-        res.status(200).json({
-            success: true,
-            message: "successfull",
-            user: req.user,
-        });
-    } else {
-        res.status(401).json({
-            success: false,
-            message: "user not authenticated",
-        });
-    }
+    res.status(200).json({
+        success: true,
+        message: "successfull",
+        user: req.user,
+    });
 };

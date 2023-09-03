@@ -1,12 +1,20 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-export const protect = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
+export const protect = async (req: any, res: Response, next: NextFunction) => {
     const bearer = req.headers.authorization;
+
+    if (req.isAuthenticated()) {
+        req.user = {
+            id: req.user?.id,
+            email: req.user?.emails[0]?.value,
+            image: req.user?.photos[0]?.value,
+            provider: req.user?.provider,
+        };
+
+        next();
+        return;
+    }
 
     if (!bearer) {
         res.status(401);

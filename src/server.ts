@@ -1,6 +1,6 @@
 import express from "express";
 import "dotenv/config";
-import rootRoute from "./routes";
+import rootRoute from "./routes/index.js";
 import passport from "passport";
 import cors from "cors";
 import morgan from "morgan";

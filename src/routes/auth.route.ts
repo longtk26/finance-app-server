@@ -1,8 +1,9 @@
 import { Router } from "express";
 import passport from "passport";
-import { configPassPort } from "../services/passport.service";
-import { CLIENT_URL } from "../constants";
-import { login, loginSuccess, register } from "../handlers/auth";
+import { configPassPort } from "../services/passport.service.js";
+import { CLIENT_URL } from "../constants/index.js";
+import { login, loginSuccess, register } from "../handlers/auth.js";
+import { protect } from "../middleware/protect.js";
 
 const authRoute = Router();
 
@@ -32,16 +33,16 @@ authRoute.get(
     })
 );
 
-// Auth in app
-
-authRoute.get("/login/success", loginSuccess);
-
-authRoute.get("/login/failure", (req, res) => {
+authRoute.get("/login/failure", (_, res) => {
     res.json({
         success: false,
         message: "Failed to login by Oauth",
     });
 });
+
+// Auth in app
+
+authRoute.get("/login/success", protect, loginSuccess);
 
 authRoute.post("/login", login);
 
