@@ -2,6 +2,7 @@ import { RowDataPacket } from "mysql2";
 import db from "../config/db.js";
 import { InfoUpdate } from "../types/index.js";
 import { nanoid } from "nanoid/async";
+import { convertColumnValueMysql } from "../utils/index.js";
 
 export const findUserByEmail = async (email: string) => {
     try {
@@ -35,15 +36,7 @@ export const createUser = async (email: string, password: string) => {
 
 export const updateUser = async (email: string, infoUpdate: InfoUpdate) => {
     try {
-        let columns = "";
-        let values: string[] = [];
-
-        for (const key in infoUpdate) {
-            columns += key + "=?, ";
-            values.push(infoUpdate[key]);
-        }
-        // Remove the comma at the end
-        columns = columns.slice(0, -2);
+        const { values, columns } = convertColumnValueMysql(infoUpdate);
 
         await db.execute(`UPDATE users SET ${columns} WHERE email = ?`, [
             ...values,
