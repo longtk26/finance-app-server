@@ -6,6 +6,10 @@ import {
     updateTransactById,
 } from "../services/transactions.service.js";
 
+/**
+ * Default getTransactByMonth
+ */
+
 export const getTransacts = async (req, res: Response) => {
     const userId = req.params.userId;
     const [month, year] = req.body.time.split("/");
