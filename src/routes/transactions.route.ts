@@ -8,8 +8,8 @@ import {
 
 const transacRoute = Router();
 
-// Need to add validate later
-// Default get transactions for months
+// Validate fields in object and check userId equals to current user
+
 transacRoute.get("/:userId", getTransacts);
 transacRoute.post("/:userId/new", newTransact);
 transacRoute.patch("/:userId/:id", updateTransact);

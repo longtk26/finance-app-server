@@ -1,12 +1,15 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { findUserByEmail } from "../services/users.service.js";
 
 export const protect = async (req: any, res: Response, next: NextFunction) => {
     const bearer = req.headers.authorization;
 
     if (req.isAuthenticated()) {
+        const idUser = await findUserByEmail(req.user?.emails[0]?.value);
+
         req.user = {
-            id: req.user?.id,
+            id: idUser,
             email: req.user?.emails[0]?.value,
             image: req.user?.photos[0]?.value,
             provider: req.user?.provider,

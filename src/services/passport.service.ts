@@ -34,13 +34,8 @@ export const configPassPort = () => {
                             const userId = nanoid(10);
 
                             db.execute(
-                                "INSERT INTO users (id, email, federated, idProvider) VALUES (?, ?, ?, ?)",
-                                [
-                                    userId,
-                                    profile._json.email,
-                                    profile.provider,
-                                    profile.id,
-                                ]
+                                "INSERT INTO users (id, email, federated) VALUES (?, ?, ?)",
+                                [userId, profile._json.email, profile.provider]
                             )
                                 .then(() => {
                                     console.log(
@@ -50,8 +45,8 @@ export const configPassPort = () => {
                                 .catch((err) => console.log(err));
                         } else if (!user.federated) {
                             db.execute(
-                                "UPDATE users SET federated = ?, idProvider = ? WHERE id = ?",
-                                [profile.provider, profile.id, user.id]
+                                "UPDATE users SET federated = ? WHERE id = ?",
+                                [profile.provider, user.id]
                             )
                                 .then(() => {
                                     console.log(

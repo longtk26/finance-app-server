@@ -8,7 +8,6 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255),
     federated VARCHAR(20),
-    idProvider VARCHAR(255),
     
     CONSTRAINT pk_users
     PRIMARY KEY (id)
@@ -47,11 +46,11 @@ ADD CONSTRAINT fk_category
 FOREIGN KEY (category)
 REFERENCES categories(name);
 
-INSERT INTO users (id, email, password, federated, idProvider)
+INSERT INTO users (id, email, password, federated)
 VALUES
-    ('1', 'user1@example.com', 'password1', 'Facebook', '123456789'),
-    ('2', 'user2@example.com', 'password2', 'Google', '987654321'),
-    ('3', 'user3@example.com', 'password3', NULL, NULL);
+    ('1', 'user1@example.com', 'password1', 'Facebook'),
+    ('2', 'user2@example.com', 'password2', 'Google'),
+    ('3', 'user3@example.com', 'password3', NULL);
     
 INSERT INTO categories (name, type)
 VALUES
@@ -63,12 +62,10 @@ VALUES
     
 INSERT INTO transactions (id, time, wallet, note, price, category, userId)
 VALUES
- --    ('101', '2023-07-01', 'Wallet 1', 'Groceries', 50, 'Food', '1'),
---     ('102', '2023-07-05', 'Wallet 2', 'Movie night', 20, 'Entertainment', '2'),
---     ('103', '2023-07-10', 'Wallet 3', 'Gasoline', 30, 'Transportation', '1'),
-    ('105', '2023-08-10', 'Wallet 3', 'Gasoline', 30, 'Transportation', '3WBHxcCJwT'),
-    ('106', '2023-08-12', 'Wallet 3', 'Tối: cơm gà', 25, 'Food', '3WBHxcCJwT');
-    -- ('104', '2023-07-15', 'Wallet 1', 'Dinner with friends', 40, 'Food', '2');
+('101', '2023-07-01', 'Wallet 1', 'Groceries', 50, 'Food', '1'),
+('102', '2023-07-05', 'Wallet 2', 'Movie night', 20, 'Entertainment', '2'),
+ ('103', '2023-07-10', 'Wallet 3', 'Gasoline', 30, 'Transportation', '1'),
+('104', '2023-07-15', 'Wallet 1', 'Dinner with friends', 40, 'Food', '2');
 
 
 

@@ -1,9 +1,12 @@
 import { Router } from "express";
 import passport from "passport";
+import { body } from "express-validator";
+
 import { configPassPort } from "../services/passport.service.js";
 import { CLIENT_URL } from "../constants/index.js";
 import { login, loginSuccess, register } from "../handlers/auth.js";
 import { protect } from "../middleware/protect.js";
+import { validate } from "../validator/index.js";
 
 const authRoute = Router();
 
@@ -44,8 +47,16 @@ authRoute.get("/login/failure", (_, res) => {
 
 authRoute.get("/login/success", protect, loginSuccess);
 
-authRoute.post("/login", login);
+authRoute.post(
+    "/login",
+    validate([body("email").isEmail(), body("password").isLength({ min: 6 })]),
+    login
+);
 
-authRoute.post("/register", register);
+authRoute.post(
+    "/register",
+    validate([body("email").isEmail(), body("password").isLength({ min: 6 })]),
+    register
+);
 
 export default authRoute;
