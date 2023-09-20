@@ -1,4 +1,4 @@
-export type InfoUpdate = {
+export type InfoUpdateUser = {
     email?: string;
     password?: string;
 };

@@ -1,6 +1,6 @@
 import { RowDataPacket } from "mysql2";
 import db from "../config/db.js";
-import { InfoUpdate } from "../types/index.js";
+import { InfoUpdateUser } from "../types/index.js";
 import { nanoid } from "nanoid/async";
 import { convertColumnValueMysql } from "../utils/index.js";
 
@@ -34,7 +34,7 @@ export const createUser = async (email: string, password: string) => {
     }
 };
 
-export const updateUser = async (email: string, infoUpdate: InfoUpdate) => {
+export const updateUser = async (email: string, infoUpdate: InfoUpdateUser) => {
     try {
         const { values, columns } = convertColumnValueMysql(infoUpdate);
 

@@ -6,7 +6,11 @@ export const getAllCategories = async () => {
         const data = await db.execute<RowDataPacket[]>(
             "SELECT * FROM categories"
         );
+
+        // Return data[0] to get neccessary data
+        return data[0];
     } catch (error) {
         console.log(error);
+        throw new Error("Internal error");
     }
 };

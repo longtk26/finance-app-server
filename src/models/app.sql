@@ -28,7 +28,7 @@ CREATE TABLE transactions (
 
 CREATE TABLE categories (
     name VARCHAR(255) NOT NULL,
-    type VARCHAR(10) NOT NULL,
+    type VARCHAR(255) NOT NULL,
     
     CONSTRAINT pk_categories
     PRIMARY KEY (name)
@@ -54,22 +54,52 @@ VALUES
     
 INSERT INTO categories (name, type)
 VALUES
-    ('Food', 'Expense'),
-    ('Entertainment', 'Expense'),
-    ('Transportation', 'Expense'),
-    ('Salary', 'Income'),
-    ('Investments', 'Income');
+    ('food & beverage', 'required expense'),
+	('transportation', 'required expense'),
+	('rentals', 'required expense'),
+	('water bill', 'required expense'),
+	('phone bill', 'required expense'),
+	('electric bill', 'required expense'),
+	('gas bill', 'required expense'),
+	('television bill', 'required expense'),
+	('internet bill', 'required expense'),
+	('other utility bills', 'required expense'),
+    ('home maintenance', 'up & comers'),
+    ('vehicle maintenance', 'up & comers'),
+    ('medical check-up', 'up & comers'),
+    ('insurances', 'up & comers'),
+    ('education', 'up & comers'),
+    ('houseware', 'up & comers'),
+    ('personal items', 'up & comers'),
+    ('pets', 'up & comers'),
+    ('home services', 'up & comers'),
+    ('other expense', 'up & comers'),
+    ('fitness', 'fun & relax'),
+    ('makeup', 'fun & relax'),
+    ('gifts & donations', 'fun & relax'),
+    ('streaming service', 'fun & relax'),
+    ('fun money', 'fun & relax'),
+    ('investment', 'investing & debt payments'),
+    ('debt collection', 'investing & debt payments'),
+    ('debt', 'investing & debt payments'),
+    ('loan', 'investing & debt payments'),
+    ('repayment', 'investing & debt payments'),
+    ('pay interest', 'investing & debt payments'),
+    ('collect interest', 'investing & debt payments'),
+    ('salary', 'income'),
+    ('other income', 'income'),
+    ('outgoing transfer', 'other'),
+    ('incoming transfer', 'other');
     
 INSERT INTO transactions (id, time, wallet, note, price, category, userId)
 VALUES
-('101', '2023-07-01', 'Wallet 1', 'Groceries', 50, 'Food', '1'),
-('102', '2023-07-05', 'Wallet 2', 'Movie night', 20, 'Entertainment', '2'),
- ('103', '2023-07-10', 'Wallet 3', 'Gasoline', 30, 'Transportation', '1'),
-('104', '2023-07-15', 'Wallet 1', 'Dinner with friends', 40, 'Food', '2');
+('101', '2023-07-01', 'Wallet 1', 'Groceries', 50, 'food & beverage', '1'),
+ ('103', '2023-07-10', 'Wallet 3', 'Gasoline', 30, 'transportation', '1'),
+('104', '2023-07-15', 'Wallet 1', 'Dinner with friends', 40, 'food & beverage', '2');
 
 
 
 SELECT * FROM users;
 SELECT * FROM transactions;
-
+SELECT * FROM categories;
 
