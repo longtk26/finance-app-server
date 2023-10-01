@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/compression": "^1.7.3",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/express-session": "^1.17.7",
@@ -38,6 +39,8 @@
     "@types/node": "^20.4.9",
     "@types/passport": "^1.0.12",
     "@types/passport-facebook": "^3.0.0",
+    "compression": "^1.7.4",
+    "helmet": "^7.0.0",
     "nodemon": "^3.0.1"
   }
 }
