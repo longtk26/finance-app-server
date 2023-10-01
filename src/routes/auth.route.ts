@@ -7,6 +7,7 @@ import { CLIENT_URL } from "../constants/index.js";
 import { login, loginSuccess, register } from "../handlers/auth.js";
 import { protect } from "../middleware/protect.js";
 import { validate } from "../validator/index.js";
+import asyncHandler from "../helpers/asyncHandler.js";
 
 const authRoute = Router();
 
@@ -36,6 +37,8 @@ authRoute.get(
     })
 );
 
+authRoute.get("/login/success", protect, loginSuccess);
+
 authRoute.get("/login/failure", (_, res) => {
     res.json({
         success: false,
@@ -45,18 +48,16 @@ authRoute.get("/login/failure", (_, res) => {
 
 // Auth in app
 
-authRoute.get("/login/success", protect, loginSuccess);
-
 authRoute.post(
     "/login",
     validate([body("email").isEmail(), body("password").isLength({ min: 6 })]),
-    login
+    asyncHandler(login)
 );
 
 authRoute.post(
     "/register",
     validate([body("email").isEmail(), body("password").isLength({ min: 6 })]),
-    register
+    asyncHandler(register)
 );
 
 export default authRoute;

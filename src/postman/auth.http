@@ -1,0 +1,9 @@
+@url_dev=http://localhost:8080/v1/api
+
+POST {{url_dev}}/auth/register
+Content-Type: application/json
+
+{
+    "email": "ngoclong1@email.com",
+    "password": "1234566"
+}
