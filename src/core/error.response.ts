@@ -38,4 +38,18 @@ class AuthFailureError extends ErrorResponse {
     }
 }
 
-export { BadRequestError, ConflictRequestError, AuthFailureError };
+class InternalServerError extends ErrorResponse {
+    constructor(
+        message = ReasonPhrases.INTERNAL_SERVER_ERROR,
+        statusCode = StatusCode.INTERNAL_SERVER_ERROR
+    ) {
+        super(message, statusCode);
+    }
+}
+
+export {
+    BadRequestError,
+    ConflictRequestError,
+    AuthFailureError,
+    InternalServerError,
+};

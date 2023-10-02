@@ -1,5 +1,6 @@
 import { Response } from "express";
 import httpStatusCode from "../utils/httpStatusCode.js";
+import { CREATEDResponseTypes, OKResponseTypes } from "../types/core/index.js";
 
 const { StatusCode, ReasonPhrases } = httpStatusCode;
 
@@ -25,13 +26,13 @@ class SuccessResponse {
 }
 
 class OK extends SuccessResponse {
-    constructor({ message, metadata }) {
+    constructor({ message, metadata }: OKResponseTypes) {
         super({ message, metadata });
     }
 }
 
 class CREATED extends SuccessResponse {
-    private options: object;
+    private options: any;
 
     constructor({
         message,
@@ -39,7 +40,7 @@ class CREATED extends SuccessResponse {
         reasonStatusCode = ReasonPhrases.CREATED,
         metadata,
         options,
-    }) {
+    }: CREATEDResponseTypes) {
         super({ message, statusCode, reasonStatusCode, metadata });
         this.options = options;
     }

@@ -7,6 +7,7 @@ import {
 } from "../handlers/transactions.js";
 import { validate } from "../validator/index.js";
 import { body, checkExact, param } from "express-validator";
+import asyncHandler from "../helpers/asyncHandler.js";
 
 const transacRoute = Router();
 
@@ -17,7 +18,7 @@ transacRoute.get(
         body("time").notEmpty().isString(),
         checkExact(),
     ]),
-    getTransacts
+    asyncHandler(getTransacts)
 );
 
 transacRoute.post(
@@ -31,7 +32,7 @@ transacRoute.post(
         body("category").notEmpty().isString(),
         checkExact(),
     ]),
-    newTransact
+    asyncHandler(newTransact)
 );
 
 transacRoute.patch(
@@ -45,7 +46,7 @@ transacRoute.patch(
         body("category").optional().isString(),
         checkExact([param("id").notEmpty()]),
     ]),
-    updateTransact
+    asyncHandler(updateTransact)
 );
 
 transacRoute.delete(
@@ -55,7 +56,7 @@ transacRoute.delete(
         param("id").notEmpty(),
         checkExact([param("id").notEmpty()]),
     ]),
-    deleteTransact
+    asyncHandler(deleteTransact)
 );
 
 export default transacRoute;

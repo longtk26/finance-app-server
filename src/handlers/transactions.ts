@@ -5,23 +5,18 @@ import {
     deleteTransactById,
     updateTransactById,
 } from "../services/transactions.service.js";
-
-/**
- * Default getTransactByMonth
- */
+import { CREATED, SuccessResponse } from "../core/success.response.js";
+import { InternalServerError } from "../core/error.response.js";
 
 export const getTransacts = async (req, res: Response) => {
     const userId = req.params.userId;
     const [month, year] = req.body.time.split("/");
     const transacts = await getTransactByMonth({ year, month }, userId);
 
-    if (transacts.length === 0) {
-        res.status(404);
-        res.json({ message: "No transacts found" });
-    } else {
-        res.status(200);
-        res.json(transacts);
-    }
+    if (transacts.length === 0)
+        new SuccessResponse({ message: "No transactions found!" }).send(res);
+
+    new SuccessResponse({ metadata: transacts }).send(res);
 };
 
 export const newTransact = async (req, res: Response) => {
@@ -30,13 +25,12 @@ export const newTransact = async (req, res: Response) => {
 
     const data = await createTransact(infoTransact, userId);
 
-    if (data) {
-        res.status(201);
-        res.json({ message: "Created transaction!" });
-    } else {
-        res.status(500);
-        res.json({ message: "Error creating transaction!" });
-    }
+    if (!data) throw new InternalServerError("Error creating transaction!");
+
+    new CREATED({
+        message: "Created transaction!",
+        metadata: data,
+    }).send(res);
 };
 
 export const updateTransact = async (req, res: Response) => {
@@ -46,13 +40,9 @@ export const updateTransact = async (req, res: Response) => {
 
     const data = await updateTransactById(transactId, userId, infoTransact);
 
-    if (data) {
-        res.status(201);
-        res.json({ message: "Updated transaction!" });
-    } else {
-        res.status(500);
-        res.json({ message: "Error updating transaction!" });
-    }
+    if (!data) throw new InternalServerError("Error updating transaction!");
+
+    new SuccessResponse({ message: "Updated transaction!" }).send(res);
 };
 
 export const deleteTransact = async (req, res: Response) => {
@@ -60,11 +50,7 @@ export const deleteTransact = async (req, res: Response) => {
     const transactId = req.params.id;
     const data = await deleteTransactById(transactId, userId);
 
-    if (data) {
-        res.status(201);
-        res.json({ message: "Deleted transaction!" });
-    } else {
-        res.status(500);
-        res.json({ message: "Error deleting transaction!" });
-    }
+    if (!data) throw new InternalServerError("Error deleting transaction!");
+
+    new SuccessResponse({ message: "Deleted transaction!" }).send(res);
 };
