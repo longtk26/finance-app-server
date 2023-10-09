@@ -7,7 +7,8 @@ import {
     TimeTransact,
     InfoUpdateTransact,
 } from "../types/services/transactions.js";
-import { convertColumnValueMysql, formatDay } from "../utils/index.js";
+import { formatDay } from "../utils/index.js";
+import { convertColumnValueMysql } from "../helpers/mysql.js";
 
 export const getTransactByMonth = async (
     time: TimeTransact,

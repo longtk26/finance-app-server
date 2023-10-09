@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import {
     findUserByEmail,
     createUser,
@@ -74,4 +74,17 @@ export const loginSuccess = (req: Request, res: Response) => {
             user: req.user,
         },
     }).send(res);
+};
+
+export const logoutPassport = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+        res.redirect("/");
+    });
 };

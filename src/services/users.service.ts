@@ -1,8 +1,8 @@
 import { RowDataPacket } from "mysql2";
 import db from "../config/db.js";
 import { nanoid } from "nanoid/async";
-import { convertColumnValueMysql } from "../utils/index.js";
 import { InfoUpdateUser } from "../types/services/users.js";
+import { convertColumnValueMysql } from "../helpers/mysql.js";
 
 export const findUserByEmail = async (email: string) => {
     const [data] = await db.execute<RowDataPacket[]>(

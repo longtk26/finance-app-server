@@ -1,13 +1,18 @@
 import { Router } from "express";
 import passport from "passport";
-import { body } from "express-validator";
 
 import { configPassPort } from "../services/passport.service.js";
 import { CLIENT_URL } from "../constants/index.js";
-import { login, loginSuccess, register } from "../handlers/auth.js";
+import {
+    login,
+    loginSuccess,
+    logoutPassport,
+    register,
+} from "../handlers/auth.js";
 import { protect } from "../middleware/protect.js";
-import { validate } from "../validator/index.js";
 import asyncHandler from "../helpers/asyncHandler.js";
+import { validateInput } from "../validator/auth.validate.js";
+import { AuthFailureError } from "../core/error.response.js";
 
 const authRoute = Router();
 
@@ -37,27 +42,17 @@ authRoute.get(
     })
 );
 
-authRoute.get("/login/success", protect, loginSuccess);
+authRoute.post("/login/success", protect, loginSuccess);
 
 authRoute.get("/login/failure", (_, res) => {
-    res.json({
-        success: false,
-        message: "Failed to login by Oauth",
-    });
+    throw new AuthFailureError("Login failed by Oauth google");
 });
+authRoute.post("/logout-passport", protect, logoutPassport);
 
 // Auth in app
 
-authRoute.post(
-    "/login",
-    validate([body("email").isEmail(), body("password").isLength({ min: 6 })]),
-    asyncHandler(login)
-);
+authRoute.post("/login", validateInput(), asyncHandler(login));
 
-authRoute.post(
-    "/register",
-    validate([body("email").isEmail(), body("password").isLength({ min: 6 })]),
-    asyncHandler(register)
-);
+authRoute.post("/register", validateInput(), asyncHandler(register));
 
 export default authRoute;

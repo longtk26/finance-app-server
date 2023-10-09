@@ -36,23 +36,10 @@ export const comparePassword = async (pass: string, hash: string) => {
 
 export const formatDay = (time: string): string => {
     const date = new Date(time);
+    const month =
+        date.getMonth() + 1 < 10
+            ? `0${date.getMonth() + 1}`
+            : date.getMonth() + 1;
 
-    return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+    return `${date.getDate()}/${month}/${date.getFullYear()}`;
 };
-
-export function convertColumnValueMysql<T>(object: T) {
-    let columns = "";
-    let values: string[] = [];
-
-    for (const key in object) {
-        columns += key + "=?, ";
-        values.push(object[key] as string);
-    }
-    // Remove the comma at the end
-    columns = columns.slice(0, -2);
-
-    return {
-        values,
-        columns,
-    };
-}

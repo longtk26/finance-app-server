@@ -1,10 +1,10 @@
 import passport from "passport";
 import { nanoid } from "nanoid";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 import db from "../config/db.js";
 import { findUserByEmail } from "./users.service.js";
-
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { SERVER_URL } from "../constants/index.js";
 
 export const configPassPort = () => {
     // passport.use(
@@ -12,7 +12,7 @@ export const configPassPort = () => {
     //         {
     //             clientID: process.env.FACEBOOK_APP_ID,
     //             clientSecret: process.env.FACEBOOK_APP_SECRET,
-    //             callbackURL: "/api/auth/facebook/callback",
+    //             callbackURL: "v1/api/auth/facebook/callback",
     //         },
     //         function (accessToken, refreshToken, profile, cb) {
     //             cb(null, profile);
@@ -23,12 +23,12 @@ export const configPassPort = () => {
     passport.use(
         new GoogleStrategy(
             {
-                clientID: process.env.GOOGLE_CLIENT_ID,
-                clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-                callbackURL: "/api/auth/google/callback",
+                clientID: process.env.GOOGLE_CLIENT_ID!,
+                clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+                callbackURL: `${SERVER_URL}/auth/google/callback`,
             },
             function (accessToken, refreshToken, profile, cb) {
-                findUserByEmail(profile._json.email)
+                findUserByEmail(profile._json.email!)
                     .then((user) => {
                         if (!user) {
                             const userId = nanoid(10);

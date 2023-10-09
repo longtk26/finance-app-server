@@ -7,7 +7,9 @@ import { protect } from "../middleware/protect.js";
 const rootRoute = Router();
 
 rootRoute.use("/auth", authRoute);
+
+// Authentication
 rootRoute.use("/transactions/", protect, transacRoute);
-rootRoute.use("/category/", protect, categoryRoute);
+rootRoute.use("/categories/", protect, categoryRoute);
 
 export default rootRoute;

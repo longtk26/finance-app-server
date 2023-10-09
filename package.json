@@ -39,6 +39,7 @@
     "@types/node": "^20.4.9",
     "@types/passport": "^1.0.12",
     "@types/passport-facebook": "^3.0.0",
+    "@types/passport-google-oauth20": "^2.0.12",
     "compression": "^1.7.4",
     "helmet": "^7.0.0",
     "nodemon": "^3.0.1"
