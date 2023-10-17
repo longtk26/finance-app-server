@@ -21,7 +21,7 @@ export const getTransactByMonth = async (
 
     const results = data.map((item) => ({
         ...item,
-        time: formatDay(item.time),
+        time: formatDay(item.time, "client"),
     }));
 
     return results;
@@ -34,9 +34,11 @@ export const createTransact = async (
     const transactId = await nanoid(10);
     const { time, wallet, note, price, category } = infoTransact;
 
+    const timeFormat = formatDay(time, "server");
+
     const data = await db.execute<ResultSetHeader>(
         `INSERT INTO transactions (id, time, wallet, note, price, category, userId) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [transactId, time, wallet, note, price, category, userId]
+        [transactId, timeFormat, wallet, note, price, category, userId]
     );
 
     return data;
@@ -67,4 +69,25 @@ export const deleteTransactById = async (
     );
 
     return data;
+};
+
+export const searchTransactByTime = async (
+    timeStart: string,
+    timeEnd: string,
+    userId: string
+) => {
+    const timeStartFormat = formatDay(timeStart, "server");
+    const timeEndFormat = formatDay(timeEnd, "server");
+
+    const [data] = await db.execute<RowDataPacket[]>(
+        "SELECT * FROM transactions WHERE time BETWEEN ? AND ? AND userId = ?;",
+        [timeStartFormat, timeEndFormat, userId]
+    );
+
+    const results = data.map((item) => ({
+        ...item,
+        time: formatDay(item.time, "client"),
+    }));
+
+    return results;
 };

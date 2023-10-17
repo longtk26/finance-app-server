@@ -34,12 +34,19 @@ export const comparePassword = async (pass: string, hash: string) => {
     }
 };
 
-export const formatDay = (time: string): string => {
+export const formatDay = (time: string, option: string): string => {
     const date = new Date(time);
     const month =
         date.getMonth() + 1 < 10
             ? `0${date.getMonth() + 1}`
             : date.getMonth() + 1;
 
-    return `${date.getDate()}/${month}/${date.getFullYear()}`;
+    const [day, monthTime, year] = time.split ? time.split("/") : ["", "", ""];
+
+    const optionsFormat = {
+        client: `${date.getDate()}/${month}/${date.getFullYear()}`,
+        server: `${year}/${monthTime}/${day}`,
+    };
+
+    return optionsFormat[option];
 };

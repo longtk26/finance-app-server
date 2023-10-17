@@ -4,12 +4,13 @@ import {
     getTransactByMonth,
     deleteTransactById,
     updateTransactById,
+    searchTransactByTime,
 } from "../services/transactions.service.js";
 import { CREATED, SuccessResponse } from "../core/success.response.js";
 import { InternalServerError } from "../core/error.response.js";
 
 export const getTransacts = async (req, res: Response) => {
-    const userId = req.params.userId;
+    const userId = req.user.id;
     const [month, year] = req.body.time.split("/");
     const transacts = await getTransactByMonth({ year, month }, userId);
 
@@ -20,7 +21,7 @@ export const getTransacts = async (req, res: Response) => {
 };
 
 export const newTransact = async (req, res: Response) => {
-    const userId = req.params.userId;
+    const userId = req.user.id;
     const infoTransact = req.body;
 
     const data = await createTransact(infoTransact, userId);
@@ -34,7 +35,7 @@ export const newTransact = async (req, res: Response) => {
 };
 
 export const updateTransact = async (req, res: Response) => {
-    const userId = req.params.userId;
+    const userId = req.user.id;
     const transactId = req.params.id;
     const infoTransact = req.body;
 
@@ -46,11 +47,24 @@ export const updateTransact = async (req, res: Response) => {
 };
 
 export const deleteTransact = async (req, res: Response) => {
-    const userId = req.params.userId;
+    const userId = req.user.id;
     const transactId = req.params.id;
     const data = await deleteTransactById(transactId, userId);
 
     if (!data) throw new InternalServerError("Error deleting transaction!");
 
     new SuccessResponse({ message: "Deleted transaction!" }).send(res);
+};
+
+export const searchTransact = async (req, res: Response) => {
+    const userId = req.user.id;
+    const { timeStart, timeEnd } = req.body;
+
+    const data = await searchTransactByTime(timeStart, timeEnd, userId);
+
+    if (!data) throw new InternalServerError("Error searching transaction!");
+
+    new SuccessResponse({
+        metadata: data,
+    }).send(res);
 };

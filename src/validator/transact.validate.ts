@@ -2,15 +2,10 @@ import { body, checkExact, param } from "express-validator";
 import { validate } from "./index.js";
 
 export const validateGetInput = () =>
-    validate([
-        param("userId").custom((val, { req }) => val === req.user.id),
-        body("time").notEmpty().isString(),
-        checkExact(),
-    ]);
+    validate([body("time").notEmpty().isString(), checkExact()]);
 
 export const validatePostInput = () =>
     validate([
-        param("userId").custom((val, { req }) => val === req.user.id),
         body("time").notEmpty().isString(),
         body("wallet").notEmpty().isString(),
         body("note").isString(),
@@ -21,7 +16,6 @@ export const validatePostInput = () =>
 
 export const validatePatchInput = () =>
     validate([
-        param("userId").custom((val, { req }) => val === req.user.id),
         body("time").optional().isString(),
         body("wallet").optional().isString(),
         body("note").optional().isString(),
@@ -31,7 +25,11 @@ export const validatePatchInput = () =>
     ]);
 
 export const validateDeleteInput = () =>
+    validate([checkExact([param("id").notEmpty()])]);
+
+export const validateSearchInput = () =>
     validate([
-        param("userId").custom((val, { req }) => val === req.user.id),
-        checkExact([param("id").notEmpty()]),
+        body("timeStart").notEmpty().isString(),
+        body("timeEnd").notEmpty().isString(),
+        checkExact(),
     ]);

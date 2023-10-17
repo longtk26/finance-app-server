@@ -4,6 +4,7 @@ import {
     newTransact,
     updateTransact,
     deleteTransact,
+    searchTransact,
 } from "../handlers/transactions.js";
 import asyncHandler from "../helpers/asyncHandler.js";
 import {
@@ -11,26 +12,25 @@ import {
     validateGetInput,
     validatePatchInput,
     validatePostInput,
+    validateSearchInput,
 } from "../validator/transact.validate.js";
 
 const transacRoute = Router();
 
-transacRoute.get("/:userId", validateGetInput(), asyncHandler(getTransacts));
+transacRoute.get("/", validateGetInput(), asyncHandler(getTransacts));
+
+transacRoute.post("/new", validatePostInput(), asyncHandler(newTransact));
 
 transacRoute.post(
-    "/:userId/new",
-    validatePostInput(),
-    asyncHandler(newTransact)
+    "/search",
+    validateSearchInput(),
+    asyncHandler(searchTransact)
 );
 
-transacRoute.patch(
-    "/:userId/:id",
-    validatePatchInput(),
-    asyncHandler(updateTransact)
-);
+transacRoute.patch("/:id", validatePatchInput(), asyncHandler(updateTransact));
 
 transacRoute.delete(
-    "/:userId/:id",
+    "/:id",
     validateDeleteInput(),
     asyncHandler(deleteTransact)
 );
