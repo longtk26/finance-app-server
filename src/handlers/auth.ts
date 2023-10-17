@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import crypto from "crypto";
+import path from "path";
+import __dirname from "../dirname.js";
 
 import {
     findUserByEmail,
@@ -52,10 +54,8 @@ export const register = async (req: Request, res: Response) => {
         const userInfo = { id: user.id, email: user.email };
         await updateUser(req.body.email, infoUpdate);
 
-        // Create token for login and key for activate
+        // Create token for login
         const token = generateToken(userInfo);
-        const keyActive = crypto.randomBytes(64).toString("hex");
-        await createKeyToken(keyActive, user.id);
 
         return new SuccessResponse({
             message: "Register successful!",
@@ -128,5 +128,5 @@ export const verifyEmail = async (req: Request, res: Response) => {
         metadata: {
             data,
         },
-    }).send(res);
+    }).sendFile(res, path.join(__dirname, "/mails/index.html"));
 };
