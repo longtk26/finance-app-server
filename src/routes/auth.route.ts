@@ -8,6 +8,8 @@ import {
     loginSuccess,
     logoutPassport,
     register,
+    sendEmail,
+    verifyEmail,
 } from "../handlers/auth.js";
 import { protect } from "../middleware/protect.js";
 import asyncHandler from "../helpers/asyncHandler.js";
@@ -43,16 +45,17 @@ authRoute.get(
 );
 
 authRoute.post("/login/success", protect, loginSuccess);
-
 authRoute.get("/login/failure", (_, res) => {
     throw new AuthFailureError("Login failed by Oauth google");
 });
 authRoute.post("/logout-passport", protect, logoutPassport);
 
 // Auth in app
-
 authRoute.post("/login", validateInput(), asyncHandler(login));
-
 authRoute.post("/register", validateInput(), asyncHandler(register));
+
+// Verfification in app
+authRoute.post("/send-email", protect, asyncHandler(sendEmail));
+authRoute.get("/verify-email", asyncHandler(verifyEmail));
 
 export default authRoute;

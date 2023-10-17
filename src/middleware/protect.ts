@@ -1,5 +1,5 @@
 import { Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { findUserByEmail } from "../services/users.service.js";
 import asyncHandler from "../helpers/asyncHandler.js";
 import { AuthFailureError } from "../core/error.response.js";
@@ -29,7 +29,10 @@ export const protect = asyncHandler(
         if (!token) throw new AuthFailureError("Not authorized!");
 
         try {
-            const payload = jwt.verify(token, process.env.SECRET_JWT!);
+            const payload = jwt.verify(
+                token,
+                process.env.SECRET_JWT!
+            ) as JwtPayload;
             req.user = payload;
 
             next();
@@ -37,7 +40,6 @@ export const protect = asyncHandler(
         } catch (error) {
             console.log(error);
             throw new AuthFailureError("Not authorized!");
-            return;
         }
     }
 );

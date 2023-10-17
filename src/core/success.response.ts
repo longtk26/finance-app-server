@@ -23,6 +23,10 @@ class SuccessResponse {
     public send(res: Response, headers = {}) {
         return res.status(this.status).json(this);
     }
+
+    public sendFile(res: Response, url: string) {
+        return res.status(this.status).sendFile(url);
+    }
 }
 
 class OK extends SuccessResponse {

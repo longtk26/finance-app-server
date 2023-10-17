@@ -8,9 +8,18 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255),
     federated VARCHAR(20),
+    activated BOOLEAN default 0,
     
     CONSTRAINT pk_users
     PRIMARY KEY (id)
+);
+
+CREATE TABLE keyTokens (
+    token VARCHAR(255) NOT NULL,
+    userId VARCHAR(10) NOT NULL,
+    
+    CONSTRAINT pk_keytoken
+    PRIMARY KEY (token)
 );
 
 CREATE TABLE transactions (
@@ -34,8 +43,6 @@ CREATE TABLE categories (
     PRIMARY KEY (name)
 );
 
-
-
 ALTER TABLE transactions 
 ADD CONSTRAINT fk_user
 FOREIGN KEY (userId)
@@ -45,6 +52,11 @@ ALTER TABLE transactions
 ADD CONSTRAINT fk_category
 FOREIGN KEY (category)
 REFERENCES categories(name);
+
+ALTER TABLE keyTokens 
+ADD CONSTRAINT fk_userId
+FOREIGN KEY (userId)
+REFERENCES users(id);
 
 INSERT INTO users (id, email, password, federated)
 VALUES
@@ -100,6 +112,7 @@ VALUES
 
 
 SELECT * FROM users;
+SELECT * FROM keyTokens;
 SELECT * FROM transactions;
 SELECT * FROM categories;
 
